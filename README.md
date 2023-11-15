@@ -1,23 +1,33 @@
 ---
-title: Flask
-description: A popular minimal server framework for Python
+title: AI Component Generator Starter for Devs
+description: Ever looked at a design file and just knew by looking what components you would need to create? This Flask application generates front-end component code based on descriptions provided in a text file. It utilizes the OpenAI API to generate component code, supporting various front-end technologies like JavaScript, JSX, TypeScript, Svelte, Vue, and ERB.
 tags:
   - python
+  - ai
   - flask
+  - openai
+  - component generator
 ---
 
-# Python Flask Example
+# AI Component Generator
 
-This is a [Flask](https://flask.palletsprojects.com/en/1.1.x/) app that serves a simple JSON response.
+This Flask application generates front-end component code based on descriptions provided in a text file. It utilizes the OpenAI API to generate component code, supporting various front-end technologies like JavaScript, JSX, TypeScript, Svelte, Vue, and ERB.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/zUcpux)
+## Features
 
-## ✨ Features
+- Upload a `.txt` file with component descriptions.
+- Choose the desired file extension for the generated components (.js, .jsx, .tsx, .svelte, .vue, .erb).
+- Uses OpenAI's API to generate the component code.
+- Download the generated components as a zip file.
 
-- Python
-- Flask
+## How to Use
 
-## 💁‍♀️ How to use
+1. **Upload a Text File**: The text file should contain component descriptions with the format: `component: [ComponentName] - props: [props] class([className])`. Each component description should be on a new line.
 
-- Install Python requirements `pip install -r requirements.txt`
-- Start the server for development `python3 main.py`
+2. **Select File Extension**: Choose the file extension for the generated components from the provided dropdown.
+
+3. **Generate Components**: Click the "Generate Components" button to process the file and generate components.
+
+4. **Download Components**: Once generated, a link to download the components in a zip file will be provided.
+
+

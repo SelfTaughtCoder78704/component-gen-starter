@@ -38,7 +38,7 @@ def generate():
                 app.logger.error("Error removing or closing downloaded file handle", error)
             return response
 
-        return send_file(zip_path, as_attachment=True, download_name='components.zip')
+        return send_file(zip_path, as_attachment=True, attachment_filename='components.zip')
     else:
         return 'Invalid file type, only .txt files are allowed', 400
 

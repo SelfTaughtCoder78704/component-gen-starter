@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Component Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #252323;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container, .instructions {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input[type="text"], input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #spinner {
+            margin-top: 10px;
+            color: #007bff;
+        }
+        #downloadLink {
+            margin-top: 10px;
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        #downloadLink:hover {
+            background-color: #218838;
+        }
+        .instructions p {
+            margin: 0;
+            line-height: 1.6;
+        }
+        .instructions code {
+            background-color: #eee;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: white;
+        }
+
+        .header h2 {
+            color: white;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: white;
+            width: fit-content;
+            margin: 0 auto;
+        }
+        footer {
+            margin-top: auto;
+            text-align: center;
+            color: white;
+        }
+
+        footer a {
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<header class="header" style="text-align: center">
+    <h1>AI Component Generator Starter </h1>
+    <h2>(for devs looking at a design file who want to mark all they see then have starting points)</h2>
+    <p>Generate components from a text file<span style="color: orange">!!!</span></p>
+</header>
+    <div class="instructions">
+        <h2>Instructions</h2>
+        <p>Please upload a <code>.txt</code> file with each component described on its own line. The expected format for each line is:</p>
+        <p><code>component: [ComponentName] - props: [props] class([className])</code></p>
+        <p>Example:</p>
+        <p><code>component: Linkbar - props: link (string), text (string) class(linkbar)</code></p>
+        <p style="font-size: 14px; font-weight: bold; color:black; margin-top: 20px;">NOTE: anything after the "-" is very arbitrary. You can add any kind of props</p>
+    </div>
+
+    <div class="container">
+        <h2>Component Generator</h2>
+        <form id="yourFormId" onsubmit="generateComponents(); return false;">
+             <input type="file" id="fileInput" name="file" required>
+            
+            <select name="file_extension" id="fileExt" required>
+                <option value="">Select a supported file extension</option>
+                <option value=".js">.js</option>
+                <option value=".jsx">.jsx</option>
+                <option value=".tsx">.tsx</option>
+                <option value=".svelte">.svelte</option>
+                <option value=".vue">.vue</option>
+                <option value=".erb">.erb</option>
+            </select>
+            <button type="submit">Generate Components</button>
+        </form>
+        <div id="spinner" style="display: none;">Generating...</div>
+        <a id="downloadLink" href="#" style="display: none;">Download Components</a>
+    </div>
+
+<footer>
+    <p>Made with ❤️ by <a href="https://github.com/SelfTaughtCoder78704">Bobby Nicholson</a></p>
+</footer>
+    <script>
+        const allowedExtensions = [
+            '.js',
+            '.jsx',
+            '.tsx',
+            '.svelte',
+            '.vue',
+            '.erb'
+        ]
+        function generateComponents() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            // Check if the file is a .txt file
+            if (!file || file.type !== 'text/plain') {
+                alert('Please upload a .txt file.');
+                return;
+            }
+
+            // Check if the file extension is allowed
+            const fileExt = document.getElementById('fileExt').value;
+            if (!allowedExtensions.includes(fileExt)) {
+                alert('Please enter a valid file extension.');
+                return;
+            }
+
+            // Show the spinner
+            document.getElementById('spinner').style.display = 'block';
+
+            const formData = new FormData(document.getElementById('yourFormId'));
+            formData.append('file', file);
+
+            fetch('/generate', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                // Hide the spinner
+                document.getElementById('spinner').style.display = 'none';
+
+                // Create a visible link for the user to download the file
+                const url = window.URL.createObjectURL(blob);
+                const downloadLink = document.getElementById('downloadLink');
+                downloadLink.href = url;
+                downloadLink.download = 'components.zip'; // Name of the downloaded file
+                downloadLink.style.display = 'block'; // Make the link visible
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Hide the spinner and possibly show an error message
+                document.getElementById('spinner').style.display = 'none';
+            });
+    }
+
+        
+
+
+
+
+
+    </script>
+</body>
+</html>
